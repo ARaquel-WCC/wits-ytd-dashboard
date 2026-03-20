@@ -917,13 +917,13 @@ function buildDashboard(view) {
 
   // Build request type pills
   const reqPillsHTML = topReqs.map(([name, count]) => {
-    const short = name.replace('Emailed request','Email').replace('Recurring Task','Recurring').replace('Equipment requests','Equipment').replace('Report a ','').replace(' incident','');
+    const short = name.replace('Emailed request','Email').replace('Recurring Task','Recurring').replace('Equipment requests','Equipment').replace('Report a ','').replace(' incident','').replace('Service Updates & Removal','Svc Updates').replace('Latency/System and Mobile Issues','Latency/Mobile').replace('Quality Assurance','QA').replace('Other question or request','Other').replace('Location Update','Location').replace('Episode Request','Episodes');
     return `<span class="pill clickable" onclick="drillDown('reqType:${name}', '${short}')">${short} (${count})</span>`;
   }).join('');
 
   // Build incident pills
   const incPillsHTML = incidentReqs.map(([name, count]) => {
-    const short = name.replace('Report a ','').replace(' incident','');
+    const short = name.replace('Report a ','').replace(' incident','').replace('Latency/System and Mobile Issues','Latency/Mobile');
     return `<span class="pill clickable" onclick="drillDown('reqType:${name}', '${short} Incidents')">${short} (${count})</span>`;
   }).join('');
 
