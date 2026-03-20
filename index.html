@@ -859,7 +859,12 @@ function buildDashboard(view) {
   const times = resTimes(tickets);
   const med = times.length ? fmtHrs(median(times)) : '—';
   const avg = times.length ? fmtHrs(times.reduce((a,b)=>a+b,0)/times.length) : '—';
-  const perDay = (total / 79).toFixed(1); // ~79 days YTD
+  // Calculate days based on actual ticket date range
+  const dates = tickets.map(t => new Date(t.created)).sort((a,b) => a-b);
+  const firstDate = dates[0];
+  const lastDate = dates[dates.length - 1];
+  const activeDays = Math.max(1, Math.ceil((lastDate - firstDate) / 86400000) + 1);
+  const perDay = (total / activeDays).toFixed(1);
 
   // Monthly
   const months = {Jan:0, Feb:0, Mar:0};
