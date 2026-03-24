@@ -1048,7 +1048,7 @@ function buildDashboard(view) {
       <div class="hero-tagline">${cfg.title}</div>
       <div class="hero-tagline">Year in</div>
       <div class="hero-sub">Review.</div>
-      <div class="hero-date">Jan 1 — Mar 20, 2026 · YTD Dashboard</div>
+      <div class="hero-date">Jan 1 — ${new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'})}, 2026 · YTD Dashboard</div>
       <img src="washburn-logo.png" alt="Washburn Center for Children" style="width:90px;opacity:0.85;margin-top:8px;">
       <div class="toggle-wrap">
         <button class="toggle-btn ${view==='it'?'active':''}" id="btn-it" onclick="switchView('it')">IT Service Desk</button>
