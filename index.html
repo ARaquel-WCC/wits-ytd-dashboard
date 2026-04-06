@@ -4,7 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Service Desk — YTD Dashboard</title>
-<script>document.title = `Service Desk — YTD ${new Date().getFullYear()}`;</script>
+<script>
+  document.title = `Service Desk — YTD ${new Date().getFullYear()}`;
+  // Apply saved theme before render to prevent flash
+  (function() {
+    const saved = localStorage.getItem('dashboard-theme');
+    if (saved === 'dark') document.documentElement.classList.add('dark');
+  })();
+  function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('dashboard-theme', isDark ? 'dark' : 'light');
+  }
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -26,33 +37,76 @@
     position: relative;
   }
 
-  @media (prefers-color-scheme: dark) {
-    body {
-      background-color: #14100c;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='none'><defs><linearGradient id='g1' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='%2318120d'/><stop offset='100%25' stop-color='%231f1814'/></linearGradient></defs><rect width='1440' height='900' fill='url(%23g1)'/><path fill='%23f0b323' fill-opacity='0.10' d='M0,180 C240,260 480,80 720,140 C960,200 1200,320 1440,220 L1440,900 L0,900 Z'/><path fill='%23f0b323' fill-opacity='0.14' d='M0,340 C240,420 480,260 720,320 C960,380 1200,480 1440,380 L1440,900 L0,900 Z'/><path fill='%23cf4520' fill-opacity='0.12' d='M0,480 C240,560 480,420 720,480 C960,540 1200,620 1440,540 L1440,900 L0,900 Z'/><path fill='%23cf4520' fill-opacity='0.18' d='M0,620 C240,700 480,580 720,620 C960,660 1200,740 1440,680 L1440,900 L0,900 Z'/><path fill='%236f5091' fill-opacity='0.20' d='M0,760 C240,820 480,720 720,760 C960,800 1200,860 1440,800 L1440,900 L0,900 Z'/></svg>");
-    }
-    .card {
-      background: rgba(30, 24, 20, 0.85) !important;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #f5f0e8 !important;
-    }
-    .card-hero, .hero-tagline, .hero-sub, .hero-eyebrow { color: #f5f0e8 !important; }
-    .hero-date { color: #a89580 !important; }
-    .num, .label strong, .chart-title, .category-focus,
-    .activity-title, .activity-primary, .activity-actor { color: #f5f0e8 !important; }
-    .label, .chart-badge, .category-name, .activity-action,
-    .activity-secondary, .activity-time, .activity-subtitle { color: #a89580 !important; }
-    .toggle-btn { background: rgba(255, 255, 255, 0.08); color: #f5f0e8; }
-    .toggle-btn.active { background: #cf4520; color: #fff; }
-    .pill { background: rgba(255, 255, 255, 0.08); color: #e8d9c5; }
-    .assignee-name { color: #f5f0e8 !important; }
-    .assignee-bar-wrap { background: rgba(255, 255, 255, 0.06); }
-    .card-quote { background: #0a0706 !important; border: 1px solid rgba(255, 255, 255, 0.05); }
-    .activity-row { border-bottom-color: rgba(255, 255, 255, 0.06); }
-    .activity-ticket { background: rgba(240, 179, 35, 0.15); color: #f0b323; }
+  html.dark body {
+    background-color: #14100c;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='none'><defs><linearGradient id='g1' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='%2318120d'/><stop offset='100%25' stop-color='%231f1814'/></linearGradient></defs><rect width='1440' height='900' fill='url(%23g1)'/><path fill='%23f0b323' fill-opacity='0.10' d='M0,180 C240,260 480,80 720,140 C960,200 1200,320 1440,220 L1440,900 L0,900 Z'/><path fill='%23f0b323' fill-opacity='0.14' d='M0,340 C240,420 480,260 720,320 C960,380 1200,480 1440,380 L1440,900 L0,900 Z'/><path fill='%23cf4520' fill-opacity='0.12' d='M0,480 C240,560 480,420 720,480 C960,540 1200,620 1440,540 L1440,900 L0,900 Z'/><path fill='%23cf4520' fill-opacity='0.18' d='M0,620 C240,700 480,580 720,620 C960,660 1200,740 1440,680 L1440,900 L0,900 Z'/><path fill='%236f5091' fill-opacity='0.20' d='M0,760 C240,820 480,720 720,760 C960,800 1200,860 1440,800 L1440,900 L0,900 Z'/></svg>");
   }
+  html.dark .card {
+    background: rgba(30, 24, 20, 0.85) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #f5f0e8 !important;
+  }
+  html.dark .card-hero,
+  html.dark .hero-tagline,
+  html.dark .hero-sub,
+  html.dark .hero-eyebrow { color: #f5f0e8 !important; }
+  html.dark .hero-date { color: #a89580 !important; }
+  html.dark .num,
+  html.dark .label strong,
+  html.dark .chart-title,
+  html.dark .category-focus,
+  html.dark .activity-title,
+  html.dark .activity-primary,
+  html.dark .activity-actor { color: #f5f0e8 !important; }
+  html.dark .label,
+  html.dark .chart-badge,
+  html.dark .category-name,
+  html.dark .activity-action,
+  html.dark .activity-secondary,
+  html.dark .activity-time,
+  html.dark .activity-subtitle { color: #a89580 !important; }
+  html.dark .toggle-btn { background: rgba(255, 255, 255, 0.08); color: #f5f0e8; }
+  html.dark .toggle-btn.active { background: #cf4520; color: #fff; }
+  html.dark .pill { background: rgba(255, 255, 255, 0.08); color: #e8d9c5; }
+  html.dark .assignee-name { color: #f5f0e8 !important; }
+  html.dark .assignee-bar-wrap { background: rgba(255, 255, 255, 0.06); }
+  html.dark .card-quote { background: #0a0706 !important; border: 1px solid rgba(255, 255, 255, 0.05); }
+  html.dark .activity-row { border-bottom-color: rgba(255, 255, 255, 0.06); }
+  html.dark .activity-ticket { background: rgba(240, 179, 35, 0.15); color: #f0b323; }
+
+  /* Theme toggle button */
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+    color: #1d1d1f;
+  }
+  .theme-toggle:hover { transform: scale(1.08); }
+  .theme-toggle svg { width: 16px; height: 16px; }
+  .theme-toggle .sun-icon { display: none; }
+  .theme-toggle .moon-icon { display: block; }
+  html.dark .theme-toggle {
+    background: rgba(30, 24, 20, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f5f0e8;
+  }
+  html.dark .theme-toggle .sun-icon { display: block; }
+  html.dark .theme-toggle .moon-icon { display: none; }
 
   body::before {
     content: '';
@@ -1063,6 +1117,10 @@
 </style>
 </head>
 <body>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+  </button>
   <div class="grid" id="dashboard-grid"></div>
 
   <!-- DRILL-DOWN MODAL -->
