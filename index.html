@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Service Desk — YTD ${new Date().getFullYear()}</title>
+<title>Service Desk — YTD Dashboard</title>
+<script>document.title = `Service Desk — YTD ${new Date().getFullYear()}`;</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -12,8 +13,8 @@
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background-color: #eaf4fb;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='none'><defs><linearGradient id='g1' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='%23eaf4fb'/><stop offset='100%25' stop-color='%23c8e4d4'/></linearGradient></defs><rect width='1440' height='900' fill='url(%23g1)'/><path fill='%2362b5e5' fill-opacity='0.22' d='M0,180 C240,260 480,80 720,140 C960,200 1200,320 1440,220 L1440,900 L0,900 Z'/><path fill='%2362b5e5' fill-opacity='0.30' d='M0,340 C240,420 480,260 720,320 C960,380 1200,480 1440,380 L1440,900 L0,900 Z'/><path fill='%23719949' fill-opacity='0.22' d='M0,480 C240,560 480,420 720,480 C960,540 1200,620 1440,540 L1440,900 L0,900 Z'/><path fill='%23719949' fill-opacity='0.28' d='M0,620 C240,700 480,580 720,620 C960,660 1200,740 1440,680 L1440,900 L0,900 Z'/><path fill='%236f5091' fill-opacity='0.20' d='M0,760 C240,820 480,720 720,760 C960,800 1200,860 1440,800 L1440,900 L0,900 Z'/></svg>");
+    background-color: #fff3e8;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='none'><defs><linearGradient id='g1' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='%23fff6ec'/><stop offset='100%25' stop-color='%23fde1c8'/></linearGradient></defs><rect width='1440' height='900' fill='url(%23g1)'/><path fill='%23f0b323' fill-opacity='0.20' d='M0,180 C240,260 480,80 720,140 C960,200 1200,320 1440,220 L1440,900 L0,900 Z'/><path fill='%23f0b323' fill-opacity='0.26' d='M0,340 C240,420 480,260 720,320 C960,380 1200,480 1440,380 L1440,900 L0,900 Z'/><path fill='%23cf4520' fill-opacity='0.18' d='M0,480 C240,560 480,420 720,480 C960,540 1200,620 1440,540 L1440,900 L0,900 Z'/><path fill='%23cf4520' fill-opacity='0.24' d='M0,620 C240,700 480,580 720,620 C960,660 1200,740 1440,680 L1440,900 L0,900 Z'/><path fill='%236f5091' fill-opacity='0.22' d='M0,760 C240,820 480,720 720,760 C960,800 1200,860 1440,800 L1440,900 L0,900 Z'/></svg>");
     background-size: cover;
     background-position: center bottom;
     background-attachment: fixed;
@@ -23,6 +24,34 @@
     align-items: flex-start;
     min-height: 100vh;
     position: relative;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #14100c;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='none'><defs><linearGradient id='g1' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='%2318120d'/><stop offset='100%25' stop-color='%231f1814'/></linearGradient></defs><rect width='1440' height='900' fill='url(%23g1)'/><path fill='%23f0b323' fill-opacity='0.10' d='M0,180 C240,260 480,80 720,140 C960,200 1200,320 1440,220 L1440,900 L0,900 Z'/><path fill='%23f0b323' fill-opacity='0.14' d='M0,340 C240,420 480,260 720,320 C960,380 1200,480 1440,380 L1440,900 L0,900 Z'/><path fill='%23cf4520' fill-opacity='0.12' d='M0,480 C240,560 480,420 720,480 C960,540 1200,620 1440,540 L1440,900 L0,900 Z'/><path fill='%23cf4520' fill-opacity='0.18' d='M0,620 C240,700 480,580 720,620 C960,660 1200,740 1440,680 L1440,900 L0,900 Z'/><path fill='%236f5091' fill-opacity='0.20' d='M0,760 C240,820 480,720 720,760 C960,800 1200,860 1440,800 L1440,900 L0,900 Z'/></svg>");
+    }
+    .card {
+      background: rgba(30, 24, 20, 0.85) !important;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #f5f0e8 !important;
+    }
+    .card-hero, .hero-tagline, .hero-sub, .hero-eyebrow { color: #f5f0e8 !important; }
+    .hero-date { color: #a89580 !important; }
+    .num, .label strong, .chart-title, .category-focus,
+    .activity-title, .activity-primary, .activity-actor { color: #f5f0e8 !important; }
+    .label, .chart-badge, .category-name, .activity-action,
+    .activity-secondary, .activity-time, .activity-subtitle { color: #a89580 !important; }
+    .toggle-btn { background: rgba(255, 255, 255, 0.08); color: #f5f0e8; }
+    .toggle-btn.active { background: #cf4520; color: #fff; }
+    .pill { background: rgba(255, 255, 255, 0.08); color: #e8d9c5; }
+    .assignee-name { color: #f5f0e8 !important; }
+    .assignee-bar-wrap { background: rgba(255, 255, 255, 0.06); }
+    .card-quote { background: #0a0706 !important; border: 1px solid rgba(255, 255, 255, 0.05); }
+    .activity-row { border-bottom-color: rgba(255, 255, 255, 0.06); }
+    .activity-ticket { background: rgba(240, 179, 35, 0.15); color: #f0b323; }
   }
 
   body::before {
