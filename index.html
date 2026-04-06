@@ -956,15 +956,15 @@ function buildDashboard(view) {
   const activeDays = Math.max(1, Math.ceil((lastDate - firstDate) / 86400000) + 1);
   const perDay = (total / activeDays).toFixed(1);
 
-  // Monthly
-  const months = {Jan:0, Feb:0, Mar:0};
+  // Monthly — dynamic: build counts for Jan through current month
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const currentMonth = new Date().getMonth(); // 0-indexed
+  const monthCounts = Array(currentMonth + 1).fill(0);
   tickets.forEach(t => {
-    const m = +t.created.slice(5,7);
-    if (m===1) months.Jan++;
-    if (m===2) months.Feb++;
-    if (m===3) months.Mar++;
+    const m = +t.created.slice(5,7) - 1; // 0-indexed
+    if (m >= 0 && m <= currentMonth) monthCounts[m]++;
   });
-  const monthMax = Math.max(months.Jan, months.Feb, months.Mar, 1);
+  const monthMax = Math.max(...monthCounts, 1);
 
   // Top request types
   const reqTypes = countBy(tickets, 'reqType').filter(e => e[0] && e[0] !== 'Unknown');
@@ -986,11 +986,20 @@ function buildDashboard(view) {
   const assignees = countBy(tickets, 'assignee').filter(e => e[0] !== 'Unassigned').slice(0, 4);
   const maxAssignee = assignees[0]?.[1] || 1;
 
-  // Bar colors per month
+  // Bar colors cycle through palette as months are added
   const barColors = [
     ['#93c5fd','#2563eb'],
     ['#67e8f9','#0891b2'],
-    ['#6ee7b7','#059669']
+    ['#6ee7b7','#059669'],
+    ['#c4b5fd','#7c3aed'],
+    ['#fda4af','#e11d48'],
+    ['#fcd34d','#d97706'],
+    ['#a5f3fc','#0284c7'],
+    ['#bbf7d0','#16a34a'],
+    ['#fde68a','#b45309'],
+    ['#f9a8d4','#be185d'],
+    ['#bfdbfe','#1d4ed8'],
+    ['#d9f99d','#4d7c0f'],
   ];
 
   const grid = document.getElementById('dashboard-grid');
@@ -1074,21 +1083,17 @@ function buildDashboard(view) {
         <div class="chart-badge">${total} YTD</div>
       </div>
       <div class="chart-bars">
-        <div class="bar-group clickable" onclick="drillDown('month:01', 'January Tickets')">
-          <div class="bar-val">${months.Jan}</div>
-          <div class="bar" style="height:${Math.max(8,months.Jan/monthMax*140)}px;background:linear-gradient(180deg,${barColors[0][0]},${barColors[0][1]})"></div>
-          <div class="bar-lbl">Jan</div>
-        </div>
-        <div class="bar-group clickable" onclick="drillDown('month:02', 'February Tickets')">
-          <div class="bar-val">${months.Feb}</div>
-          <div class="bar" style="height:${Math.max(8,months.Feb/monthMax*140)}px;background:linear-gradient(180deg,${barColors[1][0]},${barColors[1][1]})"></div>
-          <div class="bar-lbl">Feb</div>
-        </div>
-        <div class="bar-group clickable" onclick="drillDown('month:03', 'March Tickets')">
-          <div class="bar-val">${months.Mar}</div>
-          <div class="bar" style="height:${Math.max(8,months.Mar/monthMax*140)}px;background:linear-gradient(180deg,${barColors[2][0]},${barColors[2][1]})"></div>
-          <div class="bar-lbl">Mar*</div>
-        </div>
+        ${monthCounts.map((count, i) => {
+          const mm = String(i + 1).padStart(2, '0');
+          const lbl = i === currentMonth ? `${monthNames[i]}*` : monthNames[i];
+          const fullName = new Date(2026, i, 1).toLocaleString('default', { month: 'long' });
+          const [c0, c1] = barColors[i % barColors.length];
+          return `<div class="bar-group clickable" onclick="drillDown('month:${mm}', '${fullName} Tickets')">
+            <div class="bar-val">${count}</div>
+            <div class="bar" style="height:${Math.max(8, count / monthMax * 140)}px;background:linear-gradient(180deg,${c0},${c1})"></div>
+            <div class="bar-lbl">${lbl}</div>
+          </div>`;
+        }).join('')}
       </div>
     </div>
 
