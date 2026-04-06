@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Service Desk — YTD 2026</title>
+<title>Service Desk — YTD ${new Date().getFullYear()}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -938,6 +938,9 @@ function fmtHrs(h) {
   return (h/24).toFixed(1) + 'd';
 }
 
+// Month names used in both buildDashboard and buildDrillContent
+const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
 // --- Build Dashboard ---
 function buildDashboard(view) {
   const tickets = DATA[view];
@@ -957,7 +960,6 @@ function buildDashboard(view) {
   const perDay = (total / activeDays).toFixed(1);
 
   // Monthly — dynamic: build counts for Jan through current month
-  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const currentMonth = new Date().getMonth(); // 0-indexed
   const monthCounts = Array(currentMonth + 1).fill(0);
   tickets.forEach(t => {
@@ -1057,7 +1059,7 @@ function buildDashboard(view) {
       <div class="hero-tagline">${cfg.title}</div>
       <div class="hero-tagline">Year in</div>
       <div class="hero-sub">Review.</div>
-      <div class="hero-date">Jan 1 — ${new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'})}, 2026 · YTD Dashboard</div>
+      <div class="hero-date">Jan 1 — ${new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'})}, ${new Date().getFullYear()} · YTD Dashboard</div>
       <img src="washburn-logo.png" alt="Washburn Center for Children" style="width:90px;opacity:0.85;margin-top:8px;">
       <div class="toggle-wrap">
         <button class="toggle-btn ${view==='it'?'active':''}" id="btn-it" onclick="switchView('it')">IT Service Desk</button>
@@ -1086,7 +1088,7 @@ function buildDashboard(view) {
         ${monthCounts.map((count, i) => {
           const mm = String(i + 1).padStart(2, '0');
           const lbl = i === currentMonth ? `${monthNames[i]}*` : monthNames[i];
-          const fullName = new Date(2026, i, 1).toLocaleString('default', { month: 'long' });
+          const fullName = new Date(new Date().getFullYear(), i, 1).toLocaleString('default', { month: 'long' });
           const [c0, c1] = barColors[i % barColors.length];
           return `<div class="bar-group clickable" onclick="drillDown('month:${mm}', '${fullName} Tickets')">
             <div class="bar-val">${count}</div>
@@ -1214,8 +1216,9 @@ function buildDrillContent(filter, tickets) {
   if (filter === 'all') {
     const byStatus = countBy(tickets, 'status');
     const byType = countBy(tickets, 'type');
-    const byMonth = [['Jan',0],['Feb',0],['Mar',0]];
-    tickets.forEach(t => { const m = +t.created.slice(5,7); if(m>=1&&m<=3) byMonth[m-1][1]++; });
+    const curM = new Date().getMonth();
+    const byMonth = Array.from({length: curM+1}, (_,i) => [monthNames[i], 0]);
+    tickets.forEach(t => { const m = +t.created.slice(5,7)-1; if(m>=0&&m<=curM) byMonth[m][1]++; });
     const byAssignee = countBy(tickets, 'assignee').filter(e=>e[0]!=='Unassigned').slice(0,5);
     const maxA = byAssignee[0]?.[1]||1;
     return `<div class="drill-grid">
@@ -1283,8 +1286,9 @@ function buildDrillContent(filter, tickets) {
   // Generic
   const byStatus = countBy(tickets, 'status');
   const byAssignee = countBy(tickets, 'assignee').filter(e=>e[0]!=='Unassigned').slice(0,5);
-  const byMonth = [['Jan',0],['Feb',0],['Mar',0]];
-  tickets.forEach(t => { const m = +t.created.slice(5,7); if(m>=1&&m<=3) byMonth[m-1][1]++; });
+  const curM = new Date().getMonth();
+  const byMonth = Array.from({length: curM+1}, (_,i) => [monthNames[i], 0]);
+  tickets.forEach(t => { const m = +t.created.slice(5,7)-1; if(m>=0&&m<=curM) byMonth[m][1]++; });
   const resolvedPct = total > 0 ? (resolved/total*100).toFixed(0) + '%' : '—';
   let html = `<div class="drill-grid">
     ${statCard(total,'Total','#0071e3')}
