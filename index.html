@@ -94,13 +94,13 @@
     padding: 28px;
     gap: 6px;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr) auto;
     grid-template-areas:
       "hero     total    resolved  chart"
       "hero     open     restime   chart"
       "requests incidents types     types"
-      "assignee assignee quote     quote";
-    aspect-ratio: 52 / 25;
+      "assignee assignee quote     quote"
+      "activity activity activity  activity";
   }
 
   /* === TABLET (2-col) === */
@@ -118,7 +118,8 @@
         "requests incidents"
         "types    types"
         "assignee assignee"
-        "quote    quote";
+        "quote    quote"
+        "activity activity";
       aspect-ratio: unset;
     }
 
@@ -146,7 +147,8 @@
         "incidents"
         "types"
         "assignee"
-        "quote";
+        "quote"
+        "activity";
     }
 
     .hero-tagline, .hero-sub { font-size: 24px; }
@@ -506,6 +508,172 @@
   .quote-text em {
     color: #00b4d8;
     font-style: normal;
+  }
+
+  /* === ACTIVITY TICKER === */
+  .card-activity {
+    grid-area: activity;
+    padding: 18px 22px;
+    animation: fadeInUp 0.6s ease-out 0.7s both;
+  }
+
+  .activity-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .activity-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1d1d1f;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .activity-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7);
+    animation: livePulse 2s ease-in-out infinite;
+  }
+
+  @keyframes livePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+    50% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+  }
+
+  .activity-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    color: #86868b;
+  }
+
+  .activity-feed {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 20px;
+  }
+
+  .activity-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    animation: fadeInRight 0.4s ease-out both;
+  }
+
+  .activity-row:nth-child(1) { animation-delay: 0.1s; }
+  .activity-row:nth-child(2) { animation-delay: 0.15s; }
+  .activity-row:nth-child(3) { animation-delay: 0.2s; }
+  .activity-row:nth-child(4) { animation-delay: 0.25s; }
+  .activity-row:nth-child(5) { animation-delay: 0.3s; }
+  .activity-row:nth-child(6) { animation-delay: 0.35s; }
+  .activity-row:nth-child(7) { animation-delay: 0.4s; }
+  .activity-row:nth-child(8) { animation-delay: 0.45s; }
+  .activity-row:nth-child(9) { animation-delay: 0.5s; }
+  .activity-row:nth-child(10) { animation-delay: 0.55s; }
+
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(-8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .activity-icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+
+  .activity-icon svg {
+    width: 13px;
+    height: 13px;
+    stroke-width: 2.5;
+  }
+
+  .activity-icon.icon-created    { background: linear-gradient(135deg, #60a5fa, #2563eb); }
+  .activity-icon.icon-resolved   { background: linear-gradient(135deg, #34d399, #059669); }
+  .activity-icon.icon-status     { background: linear-gradient(135deg, #fbbf24, #d97706); }
+  .activity-icon.icon-assigned   { background: linear-gradient(135deg, #c4b5fd, #7c3aed); }
+  .activity-icon.icon-comment    { background: linear-gradient(135deg, #67e8f9, #0891b2); }
+  .activity-icon.icon-priority   { background: linear-gradient(135deg, #fda4af, #e11d48); }
+
+  .activity-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .activity-primary {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #1d1d1f;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .activity-primary .activity-actor {
+    color: #1d1d1f;
+    font-weight: 700;
+  }
+
+  .activity-primary .activity-action {
+    color: #515154;
+    font-weight: 500;
+  }
+
+  .activity-primary .activity-ticket {
+    font-family: 'Sora', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: #0071e3;
+    padding: 1px 5px;
+    background: rgba(0, 113, 227, 0.08);
+    border-radius: 4px;
+    margin-left: 4px;
+  }
+
+  .activity-secondary {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9.5px;
+    font-weight: 500;
+    color: #86868b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .activity-time {
+    flex-shrink: 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: #86868b;
+    text-align: right;
+  }
+
+  .activity-empty {
+    text-align: center;
+    padding: 20px;
+    color: #86868b;
+    font-size: 11px;
   }
 
   /* === HIGHLIGHT BADGE === */
@@ -879,7 +1047,7 @@
 
 <script>
 /* eslint-disable */
-let DATA = { it: [], ehr: [] };
+let DATA = { it: [], ehr: [], activity: { it: [], ehr: [] } };
 
 // Auto-refresh every 30 minutes
 setTimeout(() => location.reload(), 30 * 60 * 1000);
@@ -940,6 +1108,69 @@ function fmtHrs(h) {
 
 // Month names used in both buildDashboard and buildDrillContent
 const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// --- Activity Ticker ---
+// Icon SVGs keyed by event type — paths from Lucide/Heroicons, inlined for zero dependencies
+const ACTIVITY_ICONS = {
+  created:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>',
+  resolved: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  status:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12h16M14 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  assigned: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  comment:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  priority: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22V3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+};
+
+// Human-readable verb for each event type
+const ACTIVITY_VERBS = {
+  created:  'created',
+  resolved: 'resolved',
+  status:   'moved',
+  assigned: 'assigned',
+  comment:  'commented on',
+  priority: 'reprioritized',
+};
+
+// Convert ISO timestamp to "2m ago", "3h ago", "2d ago"
+function relativeTime(iso) {
+  if (!iso) return '';
+  const then = new Date(iso).getTime();
+  const diff = Date.now() - then;
+  if (isNaN(diff)) return '';
+  const sec = Math.floor(diff / 1000);
+  if (sec < 60) return 'just now';
+  const min = Math.floor(sec / 60);
+  if (min < 60) return `${min}m ago`;
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return `${hr}h ago`;
+  const day = Math.floor(hr / 24);
+  if (day < 7) return `${day}d ago`;
+  const wk = Math.floor(day / 7);
+  return `${wk}w ago`;
+}
+
+// Render the activity feed HTML for a given view's events list
+function buildActivityHTML(events) {
+  if (!events || events.length === 0) {
+    return '<div class="activity-empty">No recent activity</div>';
+  }
+  return events.slice(0, 10).map(e => {
+    const icon = ACTIVITY_ICONS[e.type] || ACTIVITY_ICONS.status;
+    const verb = ACTIVITY_VERBS[e.type] || 'updated';
+    const detail = e.detail ? `<div class="activity-secondary">${e.detail}</div>` : '';
+    return `<div class="activity-row">
+      <div class="activity-icon icon-${e.type}">${icon}</div>
+      <div class="activity-body">
+        <div class="activity-primary">
+          <span class="activity-actor">${e.actor}</span>
+          <span class="activity-action"> ${verb} </span>
+          <span class="activity-ticket">${e.ticket}</span>
+        </div>
+        ${detail}
+      </div>
+      <div class="activity-time">${relativeTime(e.time)}</div>
+    </div>`;
+  }).join('');
+}
 
 // --- Build Dashboard ---
 function buildDashboard(view) {
@@ -1137,6 +1368,14 @@ function buildDashboard(view) {
 
     <div class="card card-quote">
       <div class="quote-text">"<em>${total}</em> tickets handled, <em>${resolvedPct}%</em> resolved, median turnaround under <em>${med}</em>."</div>
+    </div>
+
+    <div class="card card-activity">
+      <div class="activity-header">
+        <div class="activity-title"><span class="activity-live-dot"></span>Live Activity</div>
+        <div class="activity-subtitle">Last 10 actions · Refreshed every 30 min</div>
+      </div>
+      <div class="activity-feed">${buildActivityHTML((DATA.activity && DATA.activity[view]) || [])}</div>
     </div>
   `;
 
