@@ -76,6 +76,36 @@
   html.dark .activity-row { border-bottom-color: rgba(255, 255, 255, 0.06); }
   html.dark .activity-ticket { background: rgba(240, 179, 35, 0.15); color: #f0b323; }
 
+  /* Override inline colors set by JS (tailwind-style brand color overrides for dark mode) */
+  html.dark .hero-eyebrow { color: #f0b323 !important; }
+  html.dark .hero-tagline,
+  html.dark .hero-sub { color: #ffffff !important; }
+  html.dark .num { color: #ffffff !important; }
+  html.dark .num[style*="color:#0071e3"],
+  html.dark .num[style*="color: #0071e3"] { color: #5eb3ff !important; }
+  html.dark .num[style*="color:#8b5cf6"],
+  html.dark .num[style*="color: #8b5cf6"] { color: #c4b5fd !important; }
+  html.dark .num[style*="color:#34d399"],
+  html.dark .num[style*="color: #34d399"] { color: #6ee7b7 !important; }
+  html.dark .num[style*="color:#f59e0b"],
+  html.dark .num[style*="color: #f59e0b"] { color: #fbbf24 !important; }
+  html.dark .num[style*="color:#00b4d8"],
+  html.dark .num[style*="color: #00b4d8"] { color: #67e8f9 !important; }
+  html.dark .category-name[style*="color:#0071e3"],
+  html.dark .category-name[style*="color: #0071e3"] { color: #5eb3ff !important; }
+  html.dark .category-name[style*="color:#8b5cf6"],
+  html.dark .category-name[style*="color: #8b5cf6"] { color: #c4b5fd !important; }
+  html.dark .category-name[style*="color:#ff6b6b"],
+  html.dark .category-name[style*="color: #ff6b6b"] { color: #fca5a5 !important; }
+  html.dark .category-name[style*="color:#34d399"],
+  html.dark .category-name[style*="color: #34d399"] { color: #6ee7b7 !important; }
+  html.dark .label strong[style*="color:#1d1d1f"] { color: #f5f0e8 !important; }
+  html.dark .resolution-badge.badge-blue { background: rgba(94, 179, 255, 0.15); color: #93c5fd; }
+  html.dark .resolution-badge.badge-green { background: rgba(110, 231, 183, 0.15); color: #6ee7b7; }
+  html.dark .resolution-badge.badge-amber { background: rgba(251, 191, 36, 0.15); color: #fcd34d; }
+  html.dark .toggle-wrap { background: rgba(255, 255, 255, 0.06); }
+  html.dark .toggle-btn:not(.active) { color: #a89580; }
+
   /* Theme toggle button */
   .theme-toggle {
     position: fixed;
